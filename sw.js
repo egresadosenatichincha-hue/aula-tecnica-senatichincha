@@ -1,4 +1,4 @@
-const CACHE = 'senati-aula-tecnica-v3';
+const CACHE = 'senati-aula-tecnica-v4';
 const ASSETS = ['./', './index.html', './data/torno.json', './data/fresadora.json', './data/rectificadora.json'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
