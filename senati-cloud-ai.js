@@ -45,8 +45,7 @@
  function validEndpoint(url){
    try{const p=new URL(url);return p.protocol==='https:'&&/\.workers\.dev$|\.cloudflare\.workers\.dev$|\.pages\.dev$/.test(p.hostname)}catch{return false}
  }
- let url='';
- try{url=localStorage.getItem(STORE)||''}catch(e){}
+ let url='https://senati-aula-ia.egresadosenatichincha.workers.dev';
  if(validEndpoint(url)){window.SENATI_AI_ENDPOINT=url.replace(/\/$/,'')+'/ask'}
  // Se ejecuta después del código de interfaz. Sobrescribe la función
  // de solicitud del backend sin compartir ninguna clave privada.
@@ -62,22 +61,8 @@
  const select=document.createElement('div');
  select.style.cssText='margin-top:10px;font-size:12px;color:#38516d;line-height:1.55';
  const status=document.createElement('span');
- const has=Boolean(window.SENATI_AI_ENDPOINT);
- status.textContent=has?'IA en la nube: configurada.':'IA en la nube: pendiente de activar en Cloudflare.';
- const button=document.createElement('button');
- button.className='smallbtn';button.type='button';button.style.marginLeft='10px';
- button.textContent=has?'Cambiar servidor IA':'Conectar servidor IA';
- button.onclick=()=>{
-  const previous=window.SENATI_AI_ENDPOINT?.replace(/\/ask$/,'')||'';
-  const newUrl=window.prompt('Pega aquí tu dirección pública de Cloudflare Workers, por ejemplo: https://senati-aula-ia.tu-cuenta.workers.dev',previous);
-  if(newUrl===null)return;
-  const stripped=newUrl.trim().replace(/\/ask\/?$/,'').replace(/\/$/,'');
-  if(!validEndpoint(stripped)){window.alert('Necesitas una dirección HTTPS válida de Cloudflare Workers (terminada en .workers.dev).');return}
-  try{localStorage.setItem(STORE,stripped)}catch(e){}
-  window.SENATI_AI_ENDPOINT=stripped+'/ask';
-  status.textContent='IA en la nube: configurada para este navegador.';
-  button.textContent='Cambiar servidor IA';
- };
- select.append(status,button);
+ const has=true;
+ status.textContent='IA en la nube: conectada automáticamente a SENATI.';
+ select.append(status);
  $('.inputbar')?.append(select);
 })();
