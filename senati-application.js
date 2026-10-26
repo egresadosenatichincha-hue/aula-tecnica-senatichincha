@@ -113,6 +113,7 @@ function normalizeServerSource(src){
 }
 async function requestRealAI(q){
  const endpoint=window.SENATI_AI_ENDPOINT;
+ if(typeof window.SENATI_REQUEST_AI==='function')return await window.SENATI_REQUEST_AI(q);
  if(!endpoint||!/^https:\/\//.test(endpoint))return null;
  const response=await fetch(endpoint,{
    method:'POST',headers:{'Content-Type':'application/json'},
