@@ -158,7 +158,7 @@ ask=async function(raw){
    }catch(error){$('#status').textContent='Motor de IA no disponible; consultando la biblioteca local.'}
   }
   const old=originalAnswer(q);
-  const answerResult=resolver.answer(q,active,old);
+  const answerResult=resolver.answer(q,active,null);
   showAnswer(answerResult);
   $('#status').textContent=answerResult.source?.kind?'Fuente manual disponible. La explicación automática es documental, no IA generativa.':'Consulta no sustentada: se requiere un motor de IA conectado al servidor.';
  }finally{querying=false}
