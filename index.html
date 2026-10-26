@@ -9,15 +9,15 @@
 </style>
 </head>
 <body>
-<header><div class="wrap top"><div class="brand"><span>SENATI</span><span class="separator"></span><small>AULA TÉCNICA<br>CHINCHA</small></div><span class="preview">VERSIÓN DE PRUEBA</span></div></header>
+<header><div class="wrap top"><div class="brand"><span>SENATI</span><span class="separator"></span><small>AULA TÉCNICA<br>CHINCHA</small></div><span class="preview">BIBLIOTECA TÉCNICA</span></div></header>
 <section class="hero"><div class="wrap"><div class="eyebrow">MÁQUINAS HERRAMIENTAS · ASISTENTE DE ESTUDIO</div><h1>Aprende preguntando.<br>Domina la técnica.</h1><p>Realiza consultas sobre torno, fresadora y rectificadora. Recibe explicaciones breves y escúchalas en voz alta cuando tu dispositivo lo permita.</p><div class="badges"><span>✓ PC y laptop</span><span>✓ Android y iPhone</span><span>✓ Sin instalar aplicaciones</span></div></div></section>
 <main class="wrap grid">
 <aside class="card aside"><h2>Temas de consulta</h2><p>Selecciona la máquina sobre la cual necesitas estudiar.</p><div class="topics"><button class="topic active" data-t="all">▦ Todos los temas</button><button class="topic" data-t="torno">◉ Torno I</button><button class="topic" data-t="fresadora">▤ Fresadora I</button><button class="topic" data-t="rectificadora">✳ Rectificadora plana</button></div><div class="info"><b>Acerca de esta versión</b><p>Demostración con fichas técnicas ampliadas y referencias de páginas. Todavía NO contiene los tres manuales completos ni un modelo generativo de inteligencia artificial.</p><p>Antes de usar cualquier máquina, consulta al instructor y sigue la seguridad del taller.</p></div></aside>
-<section class="card chat"><div class="chatbar"><div><strong>✧ Asistente técnico virtual</strong><small>Consultas de demostración · no reemplaza al instructor</small></div><button class="smallbtn" id="clear" type="button">Nuevo chat</button></div>
+<section class="card chat"><div class="chatbar"><div><strong>✧ Asistente técnico virtual</strong><small>Biblioteca de tres manuales · citas por página · no reemplaza al instructor</small></div><button class="smallbtn" id="clear" type="button">Nuevo chat</button></div>
 <div class="chatarea" id="messages" aria-live="polite"><div class="bubble bot">¡Hola! Soy el asistente técnico de prueba. Puedes preguntarme por el cilindrado en torno, el montaje de la prensa en fresadora o para qué se rectifica una muela.<div class="quick"><button data-q="¿Qué es el cilindrado?">¿Qué es el cilindrado?</button><button data-q="¿Cómo se monta la prensa en fresadora?">Montaje de prensa</button><button data-q="¿Para qué se rectifica la muela?">Rectificar muela</button></div></div></div>
 <div class="inputbar"><div class="controls"><label><input type="checkbox" id="autovoice" checked> Leer respuestas en voz alta</label><div><button class="smallbtn" id="repeat" type="button">↻ Repetir</button> <button class="smallbtn" id="stop" type="button">■ Detener</button></div></div><form id="form" class="inputrow"><input id="question" maxlength="400" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Pregunta"><button class="mic" id="mic" type="button" title="Dictado local si es compatible">🎙</button><button class="primary" type="submit">Enviar</button></form><div class="status" id="status">Puedes preguntar por texto. Dictado offline disponible solo en navegadores compatibles.</div></div></section>
 </main>
-<div class="notice"><div><b>Nota de publicación:</b> Esta es una versión preliminar para comprobar el acceso web y la compatibilidad de pantalla. La biblioteca SENATI completa requiere autorización de publicación antes de incorporarse a una página pública. La voz depende de las funciones locales del navegador.</div></div>
+<div class="notice"><div><b>Nota de publicación:</b> Versión de consulta textual de Torno I, Fresadora I y Rectificadora Plana con referencias al manual y número de página PDF. Las figuras y planos originales no se muestran. La búsqueda devuelve fragmentos literales y no sustituye al instructor. El micrófono sin conexión depende del navegador.</div></div>
 <footer>Proyecto educativo demostrativo de apoyo al estudio · No es una plataforma oficial institucional ni sustituye las instrucciones de seguridad del taller.</footer>
 <script>
 'use strict';
@@ -74,5 +74,121 @@ $('#repeat').addEventListener('click',()=>{if(lastAnswer)speak(lastAnswer)});
 async function dictate(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R||typeof R.available!=='function'){$('#status').textContent='Este navegador no permite verificar dictado local. Escribe la pregunta en el recuadro.';return}try{const avail=await R.available({langs:['es-ES'],processLocally:true});if(avail!=='available'){$('#status').textContent='No está disponible el reconocimiento de voz local en español en este dispositivo. Utiliza el teclado.';return}recognizer=new R();recognizer.lang='es-ES';recognizer.processLocally=true;recognizer.interimResults=false;recognizer.onresult=e=>{const q=e.results[0][0].transcript;$('#question').value=q;ask(q)};recognizer.onerror=e=>{$('#status').textContent='Micrófono: '+e.error+'. Puedes escribir la pregunta.'};recognizer.onend=()=>{if($('#status').textContent.includes('Escuchando'))$('#status').textContent='Dictado finalizado.'};recognizer.start();$('#status').textContent='Escuchando pregunta local…'}catch(e){$('#status').textContent='No se pudo activar el dictado local: '+e.message}}
 $('#mic').addEventListener('click',dictate);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+// Biblioteca textual: los manuales se cargan desde archivos públicos alojados con esta web.
+const LIBRARY = {};
+const SEGMENTS = [];
+const DOC_LABEL = {torno:'Torno I',fresadora:'Fresadora I',rectificadora:'Rectificadora Plana'};
+const DOMAIN_WORDS = {torno:['torno','tornear','torneado','cilindrado','refrentado','moleteado'],fresadora:['fresadora','fresar','fresado','portafresa','fresa'],rectificadora:['rectificadora','rectificar','rectificado','muela']};
+const NOISE_WORDS = new Set('a al ante bajo cabe con contra de del desde durante el ella ellas ellos en entre era es eso esta este esto estos estas fue ha hay la las le les lo los mas me mi mis muy no o para pero por porque que quien se ser si sin sobre son su sus te tener toda todos un una unas uno unos y ya como cual cuales cuando donde manera realiza realizar paso hacer proceso operacion herramienta figura fig hojas mecanico mantenimiento'.split(' '));
+const ntext = s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9ñ]+/g,' ').trim();
+function keywords(s){return [...new Set(ntext(s).split(/\s+/).filter(w=>w.length>=3&&!NOISE_WORDS.has(w)))]}
+function pageSegments(kind,p,text){
+ const body=text.replace(/^.*?(?:\n|$)/,'').replace(/MECÁNICO DE MANTENIMIENTO[^\n]*/gi,'').replace(/REF\.\s*[A-Z\d./ -]+\b/g,'');
+ const raw=body.split(/\n\s*\n/).map(p=>p.split(/\n/).map(x=>x.trim()).join(' ').replace(/\s+/g,' ').trim()).filter(p=>p.length>=65);
+ const result=[];
+ for(let part of raw){
+  if(part.length<=950){result.push(part);continue}
+  const sentences=part.match(/[^.!?;]+[.!?;]?\s*/g)||[part];
+  let curr='';
+  for(const sentence of sentences){if((curr+sentence).length>700&&curr){result.push(curr.trim());curr=''}curr+=sentence}
+  if(curr.trim().length>65)result.push(curr.trim());
+ }
+ return result.map((text,i)=>({kind,p,text,words:keywords(text),norm:ntext(text)}));
+}
+async function loadManuals(){
+ const files=[['torno','data/torno.json'],['fresadora','data/fresadora.json'],['rectificadora','data/rectificadora.json']];
+ const settled=await Promise.allSettled(files.map(async([name,url])=>{
+  const response=await fetch(url,{cache:'default'});
+  if(!response.ok)throw Error('HTTP '+response.status+' · '+url);
+  const data=await response.json();
+  if(!data.pages||!Array.isArray(data.pages))throw Error('Archivo de manual incorrecto');
+  LIBRARY[name]=data;
+  for(const page of data.pages)SEGMENTS.push(...pageSegments(name,page.p,page.t));
+ }));
+ const errors=settled.filter(s=>s.status==='rejected');
+ if(!SEGMENTS.length){$('#status').textContent='No se pudo cargar la biblioteca. Revisa tu conexión para la primera visita.';return}
+ const count=Object.values(LIBRARY).reduce((n,d)=>n+d.pages.length,0);
+ $('#status').textContent='Biblioteca lista: '+count+' páginas con texto, '+SEGMENTS.length+' fragmentos. Pregunta por cualquier tema.';
+ if(errors.length)$('#status').textContent+=' Faltó cargar '+errors.length+' archivo(s).';
+}
+function findExtract(q){
+ const qwords=keywords(q).filter(w=>w.length>2);
+ if(!qwords.length)return null;
+ const normalized=ntext(q), detect=Object.entries(DOMAIN_WORDS).filter(([k,arr])=>arr.some(w=>normalized.includes(w)));
+ const selected=active!=='all'?active:(detect.length===1?detect[0][0]:null);
+ let scored=[];
+ for(const s of SEGMENTS){
+  if(selected&&s.kind!==selected)continue;
+  let matched=0,score=0;
+  for(const w of qwords){
+   if(s.norm.includes(w)){matched++;score+=w.length>5?3.4:2.2}
+   else if(w.length>5&&s.norm.includes(w.slice(0,-2))){matched++;score+=1.2}
+  }
+  if(!matched)continue;
+  const coverage=matched/qwords.length;
+  if(qwords.length>2 && coverage<.36)continue;
+  score=score*(.65+.70*coverage);
+  if(s.norm.includes(normalized) && normalized.length>7)score+=6;
+  if(/^operacion|^proceso|^definicion|^tecnologia|^seguridad/.test(s.norm))score+=.5;
+  if(s.text.length<100)score*=.82;
+  scored.push({s,score,matched,coverage});
+ }
+ scored.sort((a,b)=>b.score-a.score);
+ const first=scored[0];
+ if(!first||first.score<1.8)return null;
+ const others=scored.filter(x=>(x.s.kind!==first.s.kind||Math.abs(x.s.p-first.s.p)>1)&&x.score>=first.score*.79).slice(0,2);
+ return [first,...others].slice(0,2);
+}
+const originalAnswer = answer;
+answer=function(q){
+ if(!SEGMENTS.length)return originalAnswer(q);
+ const matches=findExtract(q);
+ if(!matches)return {text:'No encontré un fragmento suficientemente relacionado con esa pregunta en los textos de los tres manuales. Prueba con el nombre de la operación, herramienta o máquina, o consulta directamente al instructor.',source:null};
+ const first=matches[0].s, second=matches[1]?.s;
+ let out='Según '+DOC_LABEL[first.kind]+' (página PDF '+first.p+'): \n'+first.text.slice(0,850);
+ if(second)out+='\n\nInformación complementaria en '+DOC_LABEL[second.kind]+', página '+second.p+':\n'+second.text.slice(0,410);
+ return {text:out,source:{kind:first.kind,p:first.p,other:second?{kind:second.kind,p:second.p}:null}};
+};
+function viewManualPage(kind,p){
+ const doc=LIBRARY[kind];
+ if(!doc)return;
+ const page=doc.pages.find(x=>x.p===p);
+ if(!page)return;
+ const cover=document.createElement('div');
+ cover.style.cssText='position:fixed;inset:0;z-index:9999;background:#071b37cc;display:flex;align-items:center;justify-content:center;padding:14px';
+ const modal=document.createElement('div');
+ modal.style.cssText='max-width:850px;width:100%;max-height:90vh;overflow:auto;background:white;border-radius:18px;padding:20px;color:#12253e;box-shadow:0 20px 75px #0006';
+ const heading=document.createElement('div');heading.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px';
+ const title=document.createElement('strong');title.textContent=DOC_LABEL[kind]+' · Página PDF '+p+' de '+doc.total;title.style.fontSize='17px';
+ const close=document.createElement('button');close.className='smallbtn';close.textContent='Cerrar ×';close.onclick=()=>cover.remove();
+ const pre=document.createElement('pre');pre.textContent=page.t;pre.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.65 system-ui,Arial,sans-serif;background:#f1f5fb;border-radius:11px;padding:16px;margin:0';
+ const disclaimer=document.createElement('p');disclaimer.textContent='Transcripción de texto extraído del PDF. Los dibujos técnicos, tablas ilustradas y planos requieren consultar el documento original.';disclaimer.style.cssText='font-size:12px;color:#64748b';
+ heading.append(title,close);modal.append(heading,disclaimer,pre);cover.append(modal);cover.addEventListener('click',e=>{if(e.target===cover)cover.remove()});
+ const escape=e=>{if(e.key==='Escape'){cover.remove();document.removeEventListener('keydown',escape)}};
+ document.addEventListener('keydown',escape);
+ document.body.append(cover);
+}
+bubble=function(message,type,source){
+ const el=document.createElement('div');el.className='bubble '+type;el.textContent=message;
+ if(source){
+  const wrapper=document.createElement('div');wrapper.className='source';
+  if(typeof source==='string')wrapper.textContent='Fuente de referencia: '+source;
+  else{
+   const makeBtn=(kind,p)=>{
+    const b=document.createElement('button');b.className='smallbtn';b.textContent='Ver '+DOC_LABEL[kind]+' · PDF pág. '+p;
+    b.style.cssText='margin:8px 8px 0 0;white-space:normal;text-align:left';
+    b.onclick=()=>viewManualPage(kind,p);
+    wrapper.append(b);
+   };
+   makeBtn(source.kind,source.p);
+   if(source.other)makeBtn(source.other.kind,source.other.p);
+  }
+  el.append(wrapper);
+ }
+ $('#messages').append(el);$('#messages').scrollTop=$('#messages').scrollHeight;
+};
+loadManuals();
+
 </script>
 </body></html>
