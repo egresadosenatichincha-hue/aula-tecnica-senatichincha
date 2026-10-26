@@ -15,7 +15,7 @@
 <aside class="card aside"><h2>Temas de consulta</h2><p>Selecciona la máquina sobre la cual necesitas estudiar.</p><div class="topics"><button class="topic active" data-t="all">▦ Todos los temas</button><button class="topic" data-t="torno">◉ Torno I</button><button class="topic" data-t="fresadora">▤ Fresadora I</button><button class="topic" data-t="rectificadora">✳ Rectificadora plana</button></div><div class="info"><b>Acerca de esta versión</b><p>Demostración con fichas técnicas ampliadas y referencias de páginas. Todavía NO contiene los tres manuales completos ni un modelo generativo de inteligencia artificial.</p><p>Antes de usar cualquier máquina, consulta al instructor y sigue la seguridad del taller.</p></div></aside>
 <section class="card chat"><div class="chatbar"><div><strong>✧ Asistente técnico virtual</strong><small>Biblioteca de tres manuales · citas por página · no reemplaza al instructor</small></div><button class="smallbtn" id="clear" type="button">Nuevo chat</button></div>
 <div class="chatarea" id="messages" aria-live="polite"><div class="bubble bot">¡Hola! Soy el asistente técnico de prueba. Puedes preguntarme por el cilindrado en torno, el montaje de la prensa en fresadora o para qué se rectifica una muela.<div class="quick"><button data-q="¿Qué es el cilindrado?">¿Qué es el cilindrado?</button><button data-q="¿Cómo se monta la prensa en fresadora?">Montaje de prensa</button><button data-q="¿Para qué se rectifica la muela?">Rectificar muela</button></div></div></div>
-<div class="inputbar"><div class="controls"><label><input type="checkbox" id="autovoice" checked> Leer respuestas en voz alta</label><div><button class="smallbtn" id="repeat" type="button">↻ Repetir</button> <button class="smallbtn" id="stop" type="button">■ Detener</button></div></div><form id="form" class="inputrow"><input id="question" maxlength="400" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Pregunta"><button class="mic" id="mic" type="button" title="Dictado local si es compatible">🎙</button><button class="primary" type="submit">Enviar</button></form><div class="status" id="status">Puedes preguntar por texto. Dictado offline disponible solo en navegadores compatibles.</div></div></section>
+<div class="inputbar"><div class="controls"><label><input type="checkbox" id="autovoice" checked> Leer respuestas en voz alta</label><div><button class="smallbtn" id="repeat" type="button">↻ Repetir</button> <button class="smallbtn" id="stop" type="button">■ Detener</button></div></div><form id="form" class="inputrow"><input id="question" maxlength="400" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Pregunta"><button class="mic" id="mic" type="button" title="Hablar: dictado local o con servicio del navegador">🎙</button><button class="primary" type="submit">Enviar</button></form><div class="status" id="status">Puedes preguntar por texto. Presiona 🎙 para hablar. Si tu navegador no tiene voz local, podrás utilizar dictado con internet.</div></div></section>
 </main>
 <div class="notice"><div><b>Nota de publicación:</b> Versión de consulta textual de Torno I, Fresadora I y Rectificadora Plana con referencias al manual y número de página PDF. Las figuras y planos originales no se muestran. La búsqueda devuelve fragmentos literales y no sustituye al instructor. El micrófono sin conexión depende del navegador.</div></div>
 <footer>Proyecto educativo demostrativo de apoyo al estudio · No es una plataforma oficial institucional ni sustituye las instrucciones de seguridad del taller.</footer>
@@ -71,7 +71,55 @@ document.querySelectorAll('[data-t]').forEach(b=>b.addEventListener('click',()=>
 $('#clear').addEventListener('click',()=>{speechSynthesis.cancel();$('#messages').innerHTML='';lastAnswer='';bubble('Nueva conversación. ¿Qué necesitas aprender?','bot')});
 $('#stop').addEventListener('click',()=>{speechSynthesis.cancel();if(recognizer)recognizer.stop();$('#status').textContent='Audio detenido.'});
 $('#repeat').addEventListener('click',()=>{if(lastAnswer)speak(lastAnswer)});
-async function dictate(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R||typeof R.available!=='function'){$('#status').textContent='Este navegador no permite verificar dictado local. Escribe la pregunta en el recuadro.';return}try{const avail=await R.available({langs:['es-ES'],processLocally:true});if(avail!=='available'){$('#status').textContent='No está disponible el reconocimiento de voz local en español en este dispositivo. Utiliza el teclado.';return}recognizer=new R();recognizer.lang='es-ES';recognizer.processLocally=true;recognizer.interimResults=false;recognizer.onresult=e=>{const q=e.results[0][0].transcript;$('#question').value=q;ask(q)};recognizer.onerror=e=>{$('#status').textContent='Micrófono: '+e.error+'. Puedes escribir la pregunta.'};recognizer.onend=()=>{if($('#status').textContent.includes('Escuchando'))$('#status').textContent='Dictado finalizado.'};recognizer.start();$('#status').textContent='Escuchando pregunta local…'}catch(e){$('#status').textContent='No se pudo activar el dictado local: '+e.message}}
+let micBusy=false;
+let micOnlineAcknowledged=false;
+function micStatus(message){$('#status').textContent=message}
+async function dictate(){
+ const R=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!R){micStatus('Este navegador no ofrece reconocimiento de voz. Utiliza el teclado o prueba Chrome en Android/PC o Safari en iPhone.');return}
+ if(recognizer){try{recognizer.abort()}catch(e){}recognizer=null}
+ if(micBusy)return;
+ micBusy=true;$('#mic').disabled=true;micStatus('Preparando el micrófono…');
+ let local=false;
+ if(typeof R.available==='function'){
+   try{local=(await R.available({langs:['es-ES'],processLocally:true}))==='available'}catch(e){local=false}
+ }
+ if(!local && !navigator.onLine){
+   micBusy=false;$('#mic').disabled=false;
+   micStatus('No hay reconocimiento de voz local y este equipo está sin conexión. Puedes escribir y escuchar las respuestas guardadas.');
+   return;
+ }
+ if(!local&&!micOnlineAcknowledged){
+   const accepted=window.confirm('Tu navegador no tiene dictado local disponible. ¿Deseas utilizar su reconocimiento de voz con internet? El navegador podría enviar tu audio a su servicio de reconocimiento. La consulta a los manuales seguirá siendo local.');
+   if(!accepted){micBusy=false;$('#mic').disabled=false;micStatus('Dictado cancelado. Puedes escribir tu pregunta.');return}
+   micOnlineAcknowledged=true;
+ }
+ try{
+   const recognition=new R();recognizer=recognition;
+   recognition.lang='es-ES';recognition.interimResults=false;recognition.continuous=false;recognition.maxAlternatives=1;
+   if('processLocally' in recognition)recognition.processLocally=local;
+   let finished=false;
+   recognition.onresult=(event)=>{
+     const transcript=event.results?.[0]?.[0]?.transcript?.trim();
+     if(transcript){$('#question').value=transcript;micStatus('Pregunta reconocida: '+transcript);ask(transcript)}
+     else micStatus('No se reconoció la pregunta. Inténtalo nuevamente.');
+   };
+   recognition.onerror=(event)=>{
+     finished=true;
+     const explanations={ 'not-allowed':'El navegador no tiene permiso para usar el micrófono.','service-not-allowed':'Servicio de reconocimiento no permitido.','no-speech':'No se escuchó una pregunta. Acércate al micrófono.','network':'No se pudo conectar al reconocimiento de voz.','audio-capture':'No se detecta un micrófono disponible.','language-not-supported':'Este navegador no dispone de reconocimiento de español.'};
+     micStatus((explanations[event.error]||'Error de micrófono: '+event.error)+' Puedes escribir la pregunta.');
+   };
+   recognition.onend=()=>{
+     recognizer=null;micBusy=false;$('#mic').disabled=false;
+     if(!finished && $('#status').textContent.startsWith('Escuchando'))micStatus('Escucha finalizada. Presiona el micrófono para preguntar otra vez.');
+   };
+   micStatus(local?'Escuchando por micrófono, sin internet…':'Escuchando por micrófono, usando el servicio de voz del navegador…');
+   recognition.start();
+ }catch(error){
+   micBusy=false;recognizer=null;$('#mic').disabled=false;
+   micStatus('No se pudo iniciar el micrófono: '+error.message+'. Prueba el teclado.');
+ }
+}
 $('#mic').addEventListener('click',dictate);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
