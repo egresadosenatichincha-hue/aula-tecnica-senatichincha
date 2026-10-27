@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "stage": "preview",
+  "version": 3,
+  "stage": "preparado para importación OCR; producción sin cambios",
   "approvedForPublicationByUser": true,
   "documents": [
     {
@@ -114,32 +114,55 @@
       "pages": 132,
       "file": "data/ampliados/control-plc.json",
       "status": "texto_indexado"
+    },
+    {
+      "id": "soldadura-mantenimiento-i",
+      "name": "Soldadura de Mantenimiento I",
+      "kind": "soldadura1",
+      "pages": 144,
+      "file": "data/ampliados/soldadura-mantenimiento-i.json",
+      "status": "ocr_procesado_pendiente_importacion"
+    },
+    {
+      "id": "afilado-manual",
+      "name": "Afilado Manual de Herramientas de Corte",
+      "kind": "afilado",
+      "pages": 155,
+      "file": "data/ampliados/afilado-manual.json",
+      "status": "ocr_procesado_pendiente_importacion"
+    },
+    {
+      "id": "soldadura-mantenimiento-ii",
+      "name": "Soldadura de Mantenimiento II",
+      "kind": "soldadura2",
+      "pages": 181,
+      "file": "data/ampliados/soldadura-mantenimiento-ii.json",
+      "status": "ocr_procesado_pendiente_importacion"
+    },
+    {
+      "id": "soldadura-mantenimiento-iii",
+      "name": "Soldadura de Mantenimiento III",
+      "kind": "soldadura3",
+      "pages": 241,
+      "file": "data/ampliados/soldadura-mantenimiento-iii.json",
+      "status": "ocr_procesado_pendiente_importacion"
+    },
+    {
+      "id": "mandos-contactores",
+      "name": "Mandos por Contactor de Motores Asíncronos",
+      "kind": "contactores",
+      "pages": 282,
+      "file": "data/ampliados/mandos-contactores.json",
+      "status": "ocr_procesado_pendiente_importacion"
+    },
+    {
+      "id": "mandos-neumaticos",
+      "name": "Mandos de Máquinas Neumáticas",
+      "kind": "neumatica",
+      "pages": 142,
+      "file": "data/ampliados/mandos-neumaticos.json",
+      "status": "ocr_procesado_pendiente_importacion"
     }
   ],
-  "pending_ocr": [
-    {
-      "title": "Soldadura de Mantenimiento I",
-      "pages": 144
-    },
-    {
-      "title": "Afilado Manual de Herramientas de Corte",
-      "pages": 155
-    },
-    {
-      "title": "Soldadura de Mantenimiento II",
-      "pages": 181
-    },
-    {
-      "title": "Soldadura de Mantenimiento III",
-      "pages": 241
-    },
-    {
-      "title": "Mandos por Contactor de Motores Asíncronos",
-      "pages": 282
-    },
-    {
-      "title": "Mandos de Máquinas Neumáticas",
-      "pages": 142
-    }
-  ]
+  "pending_ocr": []
 }
