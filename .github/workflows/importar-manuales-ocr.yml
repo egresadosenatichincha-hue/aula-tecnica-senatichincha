@@ -1,0 +1,45 @@
+name: Importar OCR de manuales SENATI
+on:
+  push:
+    paths:
+      - 'SENATI_OCR_6_Manuales_Indices.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-ocr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extraer los seis índices JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f SENATI_OCR_6_Manuales_Indices.zip
+          mkdir -p data/ampliados
+          unzip -o -j SENATI_OCR_6_Manuales_Indices.zip '*.json' -d data/ampliados/
+          for f in soldadura-mantenimiento-i afilado-manual soldadura-mantenimiento-ii soldadura-mantenimiento-iii mandos-contactores mandos-neumaticos; do
+            test -s "data/ampliados/$f.json"
+          done
+          python3 - <<'PY'
+          import json,pathlib
+          for path in pathlib.Path('data/ampliados').glob('*.json'):
+              if path.stem not in ('soldadura-mantenimiento-i','afilado-manual','soldadura-mantenimiento-ii','soldadura-mantenimiento-iii','mandos-contactores','mandos-neumaticos'):continue
+              d=json.loads(path.read_text())
+              assert len(d['pages'])==d['total'], (path,len(d['pages']))
+              assert len([p for p in d['pages'] if len(p.get('t',''))>=90]) > len(d['pages'])*.75
+              print(path,d['total'])
+          PY
+      - name: Guardar JSON en GitHub
+        shell: bash
+        run: |
+          git config user.name "senati-ocr-bot"
+          git config user.email "senati-ocr-bot@users.noreply.github.com"
+          git add data/ampliados/*.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Incorporar 6 manuales SENATI escaneados digitalizados con OCR"
+            git push
+          fi
