@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "description": "Índices OCR en español para manuales SENATI escaneados; citar siempre página física del PDF; diagramas deben consultarse en original",
+  "manuals": [
+    {
+      "id": "afilado-manual",
+      "name": "Afilado Manual de Herramientas de Corte",
+      "code": "89000241",
+      "pages": 155,
+      "pages_with_text_90": 153,
+      "characters": 192660,
+      "bytes_json": 209261,
+      "sample": [
+        {
+          "page": 11,
+          "excerpt": "SENATI AFILADO MANUAL DE HERRAMIENTAS DE CORTE\n\nTipos\n\nEsmeriladora de Pedestal\n\nEs utilizada en desbastes comunes en el\nafilado de herramientas manuales y de\nm"
+        },
+        {
+          "page": 12,
+          "excerpt": "SENATI AFILADO MANUAL DE HERRAMIENTAS DE CORTE\n\nSoportes rígidos para esmeriladoras de banco CREUSEN,\nhechos completamente de acero.\n\nCódigo 39-0001-937009 39-0"
+        }
+      ]
+    },
+    {
+      "id": "soldadura-mantenimiento-iii",
+      "name": "Soldadura de Mantenimiento III",
+      "code": "89001493",
+      "pages": 241,
+      "pages_with_text_90": 238,
+      "characters": 302326,
+      "bytes_json": 325532,
+      "sample": [
+        {
+          "page": 11,
+          "excerpt": "ye\n\nSENATI SOLDADURA DE MANTENIMIENTO\n6”PASO: Apague el soplete.\n\na) Cierre la válvula del acetileno\nen el soplete.\n\nb) Cierre la válvula del oxígeno en\nel sopl"
+        },
+        {
+          "page": 12,
+          "excerpt": "ye\n\nSENATI SOLDADURA DE MANTENIMIENTO\nSOLDAR SIN MATERIAL DEAPORTE (Hacerlíneas de fusión)\n\nEs una operación que el soldador debe dominar, ya que la repetirá co"
+        }
+      ]
+    },
+    {
+      "id": "soldadura-mantenimiento-i",
+      "name": "Soldadura de Mantenimiento I",
+      "code": "89000185",
+      "pages": 144,
+      "pages_with_text_90": 142,
+      "characters": 159065,
+      "bytes_json": 172104,
+      "sample": [
+        {
+          "page": 11,
+          "excerpt": "SENAT 1 SOLDADURA DE MANTENIMIENTO\n\nCLASIFICACIÓN DE SOLDADURA\n\nEl termino \"Soldadura\" define en la actualidad una gran cantidad de procedimientos, y en su\naspe"
+        },
+        {
+          "page": 13,
+          "excerpt": "$e\n\n1 SOLDADURA DE MANTENIMIENTO\n\nSOLDADURA POR LA CAPILARIDAD\n\nDe acuerdo con la American Welding Society (AWS), la soldadura por capilaridad comprende\nun grup"
+        }
+      ]
+    },
+    {
+      "id": "soldadura-mantenimiento-ii",
+      "name": "Soldadura de Mantenimiento II",
+      "code": "89001492",
+      "pages": 181,
+      "pages_with_text_90": 177,
+      "characters": 242569,
+      "bytes_json": 260598,
+      "sample": [
+        {
+          "page": 12,
+          "excerpt": "ye\n\nSENATI SOLDADURA DE MANTENIMIENTO\n\nPARTES FUNDAMENTALES DEL TRANSFORMADOR.- Un transformador elemental\nconsta de: (Fig. 3).\n\n- Un Bobinado Primario\n\n- Un Bo"
+        },
+        {
+          "page": 13,
+          "excerpt": "SENATI SOLDADURA DE MANTENIMIENTO\n\nCIRCUITO DE\nSOLDADURA\nBOBINA DE INDUCTANCIA REGULABLE\nFIG 5\n- Por variación del campo magnético en el núcleo (Fig. 6).\nENTRE "
+        }
+      ]
+    },
+    {
+      "id": "mandos-neumaticos",
+      "name": "Mandos de Máquinas Neumáticas",
+      "code": "89000077",
+      "pages": 142,
+      "pages_with_text_90": 140,
+      "characters": 179283,
+      "bytes_json": 195226,
+      "sample": [
+        {
+          "page": 13,
+          "excerpt": "AA\n\nSENATI MANDOS DE MÁQUINAS NEUMÁTICAS\n\nCOMPRESOR DE PISTÓN\n\nSon los más difundidos. Se construyen de baja, media y alta presión.\n\nEl aire aspirado por el pis"
+        },
+        {
+          "page": 14,
+          "excerpt": "y\n\nSENAT MANDOS DE MÁQUINAS NEUMÁTICAS\n\nEn compresores de pistón de varias etapas se elige una relación de compresión\nmenor por etapa; además se enfría el aire "
+        }
+      ]
+    },
+    {
+      "id": "mandos-contactores",
+      "name": "Mandos por Contactor de Motores Asíncronos",
+      "code": "89000078",
+      "pages": 282,
+      "pages_with_text_90": 252,
+      "characters": 306226,
+      "bytes_json": 333115,
+      "sample": [
+        {
+          "page": 17,
+          "excerpt": "An\n\nSENATI MANDOS POR CONTACTOR DE MOTORES ASÍNCRONOS\n\nOPERACIÓN:\nFijar elementos de automatismo\n\nMontar elementos del circuito de potencia y control en panel.\n"
+        },
+        {
+          "page": 18,
+          "excerpt": "CA\n\nSENATI] MANDOS POR CONTACTOR DE MOTORES ASÍNCRONOS\n\nOPERACIÓN:\nProbar motor de inducción trifásico, jaula de ardilla\n\nEfectuar pruebas de resistencia de ais"
+        }
+      ]
+    }
+  ]
+}
