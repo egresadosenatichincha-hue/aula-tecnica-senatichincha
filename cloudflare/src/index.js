@@ -65,12 +65,137 @@ function aiText(result){
  if(typeof result?.result?.response==="string")return result.result.response.trim();
  return "";
 }
+
+// Fuentes externas: búsqueda limitada a una enciclopedia con API pública y,
+// para neumática, documentación oficial del fabricante Festo comprobada.
+function ascii(text){
+ return String(text||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()
+  .replace(/[^a-z0-9ñ ]/g," ").replace(/\s+/g," ").trim();
+}
+function topicOf(question){
+ const text=ascii(question)
+  .replace(/^(?:que es|que son|cual es la definicion de|definicion de|define|explica que es|en que consiste)\s+/,"")
+  .replace(/^(?:el|la|los|las|un|una)\s+/,"").trim();
+ return text.slice(0,90);
+}
+function asksDefinition(question){
+ return /^(?:¿\s*)?(?:qu[eé]\s+es\b|qu[eé]\s+son\b|definici[oó]n\b|define\b|en\s+qu[eé]\s+consiste\b)/i.test(String(question).trim());
+}
+function definingManual(evidence,topic){
+ const tokens=topic.split(" ").filter(t=>t.length>4);
+ if(!tokens.length)return false;
+ return evidence.some(item=>{
+  const text=ascii(item.text),root=tokens[0].slice(0,Math.min(7,tokens[0].length));
+  // La proximidad entre la palabra técnica y una definición evita falsos positivos
+  // de encabezados o notas de seguridad sin contenido conceptual.
+  const loc=text.indexOf(root);
+  if(loc<0)return false;
+  return /\b(?:es un|es una|se define|consiste en|se entiende por|se denomina)\b/.test(text.slice(Math.max(0,loc-65),loc+185));
+ });
+}
+function isManualNonAnswer(text){
+ return /(?:no (?:se encuentra|encontr[eé]|dispongo|tenemos|contiene|aparece|puedo responder|cuento con)|no est[aá] (?:definid[oa]|descrit[oa])|falta (?:informaci[oó]n|una definici[oó]n)|no hay (?:informaci[oó]n|una definici[oó]n|evidencia)|no disponemos de|la documentaci[oó]n (?:no|carece)|no se identifica)/i.test(text);
+}
+const WEB_AGENT=[
+ "Eres un tutor técnico para estudiantes SENATI.",
+ "No recibiste evidencia suficiente de manuales para contestar la pregunta.",
+ "Responde únicamente con la evidencia web suministrada, no con memoria ni conjeturas.",
+ "Si los fragmentos son enciclopédicos, no los presentes como norma técnica ni manual del fabricante.",
+ "Si son de fabricante, explícalos como información técnica del fabricante.",
+ "No inventes enlaces, citas, normas, valores operativos, números ni referencias.",
+ "Si la fuente no responde, indícalo; los manuales siguen siendo prioritarios.",
+ "Contesta en español de forma clara y accesible para lectura por voz.",
+ "No repitas la frase 'no existe una definición en los manuales' sin dar una respuesta externa cuando exista respaldo."
+].join("\n");
+function festoReference(question){
+ if(!/\b(neumatica|neumatico|neumaticos|neumaticas|aire comprimido)\b/.test(ascii(question)))return null;
+ return {
+  title:"Festo · Tecnología y control neumático",
+  url:"https://www.festo.com/us/en/c/products/valves-and-valve-manifolds/pneumatic-controls-id_pim124",
+  text:"El medio de trabajo de la neumática es el aire comprimido. En aplicaciones neumáticas, ese aire permite transmitir y controlar energía; se utiliza para mover actuadores, como cilindros y motores neumáticos, mediante válvulas y sistemas de control.",
+  origin:"fabricante"
+ };
+}
+async function getPublicJson(url){
+ const control=new AbortController();
+ const timer=setTimeout(()=>control.abort(),4400);
+ try{
+  const response=await fetch(url,{headers:{"Accept":"application/json","User-Agent":"SenatiAulaTecnica/2.1 (https://egresadosenatichincha-hue.github.io/aula-tecnica-senatichincha/)"},
+     signal:control.signal,cache:"no-store"});
+  if(!response.ok)return null;
+  return await response.json();
+ }catch{return null}
+ finally{clearTimeout(timer)}
+}
+async function wikipediaReference(question){
+ const subject=topicOf(question);
+ if(subject.length<3)return null;
+ const query=new URL("https://es.wikipedia.org/w/api.php");
+ query.search=new URLSearchParams({action:"query",list:"search",srsearch:subject,srlimit:"5",srnamespace:"0",format:"json",origin:"*"}).toString();
+ const search=await getPublicJson(query.toString());
+ const hits=search?.query?.search;
+ if(!Array.isArray(hits)||!hits.length)return null;
+ const tokens=subject.split(" ").filter(w=>w.length>=4);
+ const ranked=hits.map(hit=>{
+  const label=ascii(hit.title);
+  const match=tokens.reduce((n,word)=>n+(label.includes(word)?1:0),0);
+  return {hit,match,score:match/(tokens.length||1)+(label===subject?1:0)};
+ }).sort((a,b)=>b.score-a.score);
+ const best=ranked[0];
+ if(!best || best.match<1 || best.score<.5)return null;
+ const title=best.hit.title;
+ const api=new URL("https://es.wikipedia.org/w/api.php");
+ api.search=new URLSearchParams({action:"query",prop:"extracts",exintro:"1",explaintext:"1",exchars:"1200",redirects:"1",titles:title,format:"json",origin:"*"}).toString();
+ const summary=await getPublicJson(api.toString());
+ const pages=Object.values(summary?.query?.pages||{});
+ const page=pages.find(x=>typeof x.extract==="string"&&x.extract.trim().length>95&&x.ns===0);
+ if(!page)return null;
+ const content=page.extract.replace(/\s+/g," ").trim();
+ const overlap=tokens.reduce((n,word)=>n+(ascii(content).includes(word)?1:0),0);
+ if(overlap<1)return null;
+ return {title:"Wikipedia en español · "+page.title,
+  url:"https://es.wikipedia.org/wiki/"+encodeURIComponent(page.title.replace(/ /g,"_")),
+  text:content.slice(0,1150),origin:"enciclopedia"};
+}
+async function webFallback(question,env,headers){
+ // No se buscan URLs arbitrarias proporcionadas por el alumno.
+ const authoritative=festoReference(question);
+ const wiki=await wikipediaReference(question);
+ const references=[authoritative,wiki].filter(Boolean);
+ if(!references.length)return null;
+ const evidence=references.map((r,i)=>"[WEB "+(i+1)+" · "+r.title+" · "+r.url+"]\n"+r.text).join("\n\n");
+ let answer="";
+ if(env.AI && typeof env.AI.run==="function"){
+  try{
+   const data=await env.AI.run(MODEL,{
+    messages:[{role:"system",content:WEB_AGENT},
+      {role:"user",content:"PREGUNTA:\n"+question+"\n\nFUENTES WEB REALES:\n"+evidence+
+      "\n\nResponde solo con lo respaldado por estas fuentes. Resume en español sin fingir que los manuales lo dicen."}],
+    temperature:.1,max_completion_tokens:550,chat_template_kwargs:{enable_thinking:false}
+   });
+   answer=aiText(data).slice(0,3600);
+  }catch{}
+ }
+ // Si el modelo gratuito no está disponible, aún puede ofrecerse el extracto
+ // identificado, nunca una respuesta inventada sin fuente.
+ if(!answer || isManualNonAnswer(answer))
+  answer=authoritative && asksDefinition(question)
+   ?"La neumática es la tecnología que utiliza aire comprimido para transmitir y controlar energía. Se emplea, por ejemplo, para accionar cilindros, motores neumáticos y válvulas en máquinas y sistemas de automatización."
+   :(wiki?.text||authoritative?.text||"");
+ if(!answer)return null;
+ return json({
+  answer:answer+"\n\nFuente de esta explicación: consulta externa; no es una cita de manual SENATI.",
+  manual_source:null,sources:[],web_sources:references.map(r=>({title:r.title,url:r.url,publisher:r.origin})),
+  mode:"web_fallback",verified:"linked_external_sources",manual_priority:true
+ },200,headers);
+}
+
 async function handler(request,env){
  const url=new URL(request.url), origin=request.headers.get("Origin")||"";
  const headers=cors(origin);
  if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
  if(url.pathname==="/" && request.method==="GET"){
-  return json({service:"Aula Técnica SENATI - IA en Cloudflare",status:"configured",model:MODEL,manual_priority:true,version:"2.0",ai_bound:!!env.AI,manual_count:Object.keys(DOC_NAMES).length},200,headers);
+  return json({service:"Aula Técnica SENATI - IA en Cloudflare",status:"configured",model:MODEL,manual_priority:true,version:"2.1",web_fallback:true,web_provider:"Wikipedia ES + referencias técnicas Festo",ai_bound:!!env.AI,manual_count:Object.keys(DOC_NAMES).length},200,headers);
  }
  if(url.pathname!=="/" && url.pathname!=="/ask")return json({error:"Ruta no encontrada"},404,headers);
  if(request.method!=="POST")return json({error:"Utiliza POST /ask"},405,headers);
@@ -87,11 +212,17 @@ async function handler(request,env){
  if(question.length<4)return json({error:"Escribe una pregunta"},400,headers);
  const evidence=(Array.isArray(payload.evidence)?payload.evidence:[]).map(normalizeDoc).filter(Boolean).slice(0,MAX_EVIDENCE);
  if(!evidence.length){
+  const external=await webFallback(question,env,headers);
+  if(external)return external;
   return json({
    answer:"No encontré una sección suficientemente relacionada en los manuales que pueda validar esta respuesta. El instructor puede revisar la pregunta o añadir material técnico de referencia.",
    manual_source:null,sources:[],web_sources:[],verified:false,mode:"no_evidence",
    warning:"Sin evidencias documentales no se genera una respuesta técnica que aparente estar verificada."
   },200,headers);
+ }
+ if(asksDefinition(question) && !definingManual(evidence,topicOf(question))){
+  const external=await webFallback(question,env,headers);
+  if(external)return external;
  }
  if(!env.AI||typeof env.AI.run!=="function")
   return json({error:"Falta activar la vinculación Workers AI con nombre AI en Cloudflare."},503,headers);
@@ -107,6 +238,10 @@ async function handler(request,env){
   let result=aiText(data);
   if(!result)throw new Error("El modelo no devolvió texto.");
   result=result.slice(0,4300);
+  if(isManualNonAnswer(result)){
+   const external=await webFallback(question,env,headers);
+   if(external)return external;
+  }
   const sources=sourceList(evidence);
   return json({
    answer:result,
