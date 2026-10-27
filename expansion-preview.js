@@ -28,7 +28,7 @@ status.id="expansionStatus";
 status.style.cssText="padding:12px 16px;background:#eaf2ff;color:#184983;border:1px solid #adcafb;border-radius:10px;margin:10px 0;font-size:13px";
 status.textContent="Ampliación documental: cargando veinte manuales adicionales…";
 document.querySelector(".aside")?.prepend(status);
-Promise.allSettled(catalog.map(async x=>{
+window.SENATI_LIBRARY_READY=Promise.allSettled(catalog.map(async x=>{
 const r=await fetch("./data/ampliados/"+x.id+".json",{cache:"no-cache"});
 if(!r.ok)throw Error(x.name+" "+r.status);
 const doc=await r.json();
