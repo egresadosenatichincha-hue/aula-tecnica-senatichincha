@@ -40,7 +40,10 @@ const seen=new Set();
 for(const pg of doc.pages){
 if(!pg.t||pg.t.length<75||seen.has(pg.p))continue;
 seen.add(pg.p);
-const segments=pageSegments(x.kind,pg.p,pg.t);
+// El texto OCR y los índices nuevos están a menudo en una sola línea.
+// El parser original elimina la primera línea como encabezado: añadir un
+// salto inicial protege todo el contenido recuperado.
+const segments=pageSegments(x.kind,pg.p,"\n"+pg.t);
 for(const seg of segments){SEGMENTS.push(seg);added++}
 }
 return {name:x.name,pages:seen.size,fragments:added};
@@ -52,5 +55,13 @@ const box=document.createElement("div");
 box.style.cssText="font-size:12px;color:#365a87;margin-top:10px";
 box.textContent="Fuentes añadidas: "+success.map(x=>x.pages+" págs. de "+x.name).join(" | ");
 status.append(box);
+const panel=document.createElement("section");
+panel.style.cssText="margin-top:12px;padding:10px;border-top:1px solid #c3d8f1";
+const heading=document.createElement("div");heading.textContent="Seleccionar manual ampliado:";heading.style.cssText="font-weight:700;margin:0 0 7px";panel.append(heading);
+const selector=document.createElement("select");selector.style.cssText="width:100%;padding:8px;border:1px solid #afc9e3;border-radius:8px;color:#123d70";
+const first=document.createElement("option");first.value="all";first.textContent="Todos los manuales (originales y nuevos)";selector.append(first);
+for(const item of catalog){if(!success.find(d=>d.name===item.name))continue;const option=document.createElement("option");option.value=item.kind;option.textContent=item.name;selector.append(option)}
+selector.addEventListener("change",()=>{active=selector.value;document.querySelectorAll("[data-t]").forEach(button=>button.classList.remove("active"));document.querySelector("#status").textContent="Manual seleccionado: "+(catalog.find(x=>x.kind===active)?.name||"Todos")});
+panel.append(selector);status.append(panel);
 });
 })();
