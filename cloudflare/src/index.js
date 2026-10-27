@@ -3,7 +3,7 @@
 // El contenido recuperado proviene prioritariamente de los manuales públicos del proyecto.
 const ALLOWED_ORIGIN = "https://egresadosenatichincha-hue.github.io";
 const MODEL = "@cf/google/gemma-4-26b-a4b-it";
-const DOC_NAMES = Object.freeze({torno:"Torno I",fresadora:"Fresadora I",rectificadora:"Rectificadora Plana"});
+const DOC_NAMES = Object.freeze({torno:"Torno I",fresadora:"Fresadora I",rectificadora:"Rectificadora Plana",electronica:"Electrónica Industrial",mantenimiento:"Mantenimiento Mecánico I",electricidad:"Electricidad de Mantenimiento",banco:"Mecánica de Banco y Ajuste",gestion:"Gestión y Administración del Mantenimiento",predictivo:"Mantenimiento Predictivo y TPM",preventivo:"Mantenimiento Preventivo",hidraulica1:"Mantenimiento y reparación de equipos hidráulicos I",hidraulica2:"Mantenimiento y reparación de equipos hidráulicos II",hidroneumatica1:"Mantenimiento de equipos hidráulicos y neumáticos I",hidroneumatica2:"Mantenimiento de equipos hidráulicos y neumáticos II",mandoshidraulicos:"Mandos de Máquinas Hidráulicas",electroneumatica:"Mandos de Sistemas Electroneumáticos",plc:"Sistema de Control con PLC"});
 const MAX_EVIDENCE=5;
 function cors(origin){
  const allowed=origin===ALLOWED_ORIGIN || origin==="http://localhost:8787" || origin==="http://localhost:8000";
@@ -24,7 +24,7 @@ function cleanText(input,limit){return String(input||"").replace(/\0/g,"").slice
 function normalizeDoc(item){
  if(!item||typeof item!=="object"||!(item.kind in DOC_NAMES))return null;
  const page=Number(item.p);
- if(!Number.isSafeInteger(page)||page<1||page>350)return null;
+ if(!Number.isSafeInteger(page)||page<1||page>450)return null;
  const text=cleanText(item.text,1600);
  if(text.length<90)return null;
  return {kind:item.kind,p:page,title:DOC_NAMES[item.kind],text};
