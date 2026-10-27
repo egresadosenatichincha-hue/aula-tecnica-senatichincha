@@ -8,18 +8,51 @@ const originalBubble=bubble;
 const originalAnswer=answer;
 const SYNTH_SUPPORTED=('speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined');
 let speakingId=0, utterance=null;
+// Limpieza SOLO para la voz: el texto y las fuentes en pantalla no cambian.
 function cleanSpeech(value){
-  return String(value||'').replace(/\bhttps?:\/\/\S+/g,'').replace(/\s+/g,' ').replace(/[•]/g,', ').trim();
+  return String(value||'')
+    .replace(/\x60{3}[\s\S]*?\x60{3}/g,' ')             // Bloques de código.
+    .replace(/!\[([^\]]*)\]\((?:https?:\/\/|\/)[^)]+\)/g,'$1')
+    .replace(/\[([^\]]+)\]\((?:https?:\/\/|\/)[^)]+\)/g,'$1')
+    .replace(/\bhttps?:\/\/\S+/gi,' ')
+    .replace(/^\s{0,3}#{1,6}\s*/gm,'')                 // Encabezados.
+    .replace(/^\s*(?:[-*+•]|\d+[.)])\s+/gm,' ')       // Listas.
+    .replace(/^\s*(?:\|?\s*:?-{3,}:?\s*\|?)+\s*$/gm,'')
+    .replace(/(\d)\s*\*\s*(\d)/g,'$1 por $2')          // Multiplicación.
+    .replace(/[*_~\x60#]+/g,'')                        // Nunca leer «asterisco».
+    .replace(/[|]+/g,', ')
+    .replace(/[\u2022\u25aa\u25cf\u25e6]/g,', ')
+    .replace(/\p{Extended_Pictographic}/gu,'')        // Emojis.
+    .replace(/\s*([,.;:!?])\s*/g,'$1 ')
+    .replace(/\s+/g,' ')
+    .trim();
 }
+// Una frase o intervención continua; textos largos se encadenan automáticamente.
 function makeChunks(raw){
-  const words=cleanSpeech(raw).split(/\s+/);
-  const chunks=[];let part='';
-  for(const w of words){
-    if(part && part.length+w.length+1>190){chunks.push(part);part=''}
-    part+=(part?' ':'')+w;
+  const text=cleanSpeech(raw);
+  if(!text)return [];
+  if(text.length<=850)return [text];
+  const sentences=text.match(/[^.!?;]+(?:[.!?;]+|$)/g)||[text];
+  const chunks=[];
+  let part='';
+  for(const phrase of sentences){
+    let sentence=phrase.trim();
+    if(!sentence)continue;
+    if(part && part.length+sentence.length+1>850){
+      chunks.push(part.trim());
+      part='';
+    }
+    while(sentence.length>850){
+      let pivot=sentence.lastIndexOf(' ',850);
+      if(pivot<320)pivot=850;
+      const head=sentence.slice(0,pivot).trim();
+      if(head)chunks.push(head);
+      sentence=sentence.slice(pivot).trim();
+    }
+    if(sentence)part+=(part?' ':'')+sentence;
   }
-  if(part)chunks.push(part);
-  return chunks.slice(0,32);
+  if(part.trim())chunks.push(part.trim());
+  return chunks;
 }
 function speakingError(message){
  const status=$('#status');
@@ -45,10 +78,10 @@ speak=function(raw){
   if(job!==speakingId || current>=chunks.length)return;
   const u=new SpeechSynthesisUtterance(chunks[current++]);
   if(voice){u.voice=voice;u.lang=voice.lang}else{u.lang='es-ES'}
-  u.rate=.94;u.pitch=1;u.volume=1;
+  u.rate=1;u.pitch=1;u.volume=1;
   utterance=u;
   u.onend=()=>{if(job===speakingId)playNext()};
-  u.onerror=e=>{if(job===speakingId)speakingError('No fue posible escuchar el audio. Prueba tocar de nuevo «Escuchar respuesta» ('+(e.error||'error de voz')+').')};
+  u.onerror=e=>{if(job===speakingId && !['interrupted','canceled'].includes(e.error))speakingError('No fue posible escuchar el audio. Prueba tocar de nuevo «Escuchar respuesta» ('+(e.error||'error de voz')+').')};
   try{speechSynthesis.speak(u)}
   catch(e){speakingError('El navegador no pudo reproducir el audio: '+e.message)}
  };
