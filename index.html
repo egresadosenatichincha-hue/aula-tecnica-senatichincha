@@ -2,23 +2,110 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0643bf">
-<title>Aula Técnica | Máquinas Herramientas · SENATI Chincha</title>
-<meta name="description" content="Demostración del asistente técnico web para Máquinas Herramientas.">
+<title>Aula Técnica SENATI Chincha | Mecánica de Mantenimiento</title>
+<meta name="description" content="Plataforma académica de apoyo para Mecánica de Mantenimiento: 23 manuales técnicos, IA con prioridad documental y respuestas escritas y por voz.">
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#102139;background:#f3f7fd}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #3aa2ff;outline-offset:2px}.wrap{max-width:1180px;margin:auto;padding:0 22px}header{background:#fff;border-bottom:1px solid #dee6f3}.top{height:77px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:12px;font-weight:850;color:#003cb8;font-size:24px;letter-spacing:.01em}.brand small{color:#395878;font-size:12px;letter-spacing:.12em;font-weight:800}.brand .separator{width:1px;height:30px;background:#dae3f0}.preview{background:#e6f0ff;border:1px solid #bad7fa;color:#12438e;padding:7px 11px;border-radius:30px;font-size:12px;font-weight:750}.hero{background:linear-gradient(115deg,#07307b,#064ac4 58%,#02a7cf);color:white;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-110px;top:-80px;width:550px;height:550px;border:2px solid #ffffff26;border-radius:50%;box-shadow:0 0 0 90px #ffffff0a,0 0 0 180px #ffffff09}.hero .wrap{padding-top:47px;padding-bottom:50px;position:relative;z-index:1}.hero .eyebrow{font-size:12px;letter-spacing:.19em;font-weight:800;color:#a7dfff}.hero h1{font-size:clamp(30px,4.9vw,54px);letter-spacing:-.04em;line-height:1.12;margin:12px 0 14px;max-width:770px}.hero p{margin:0;font-size:16px;max-width:690px;color:#e0ecff;line-height:1.65}.badges{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px}.badges span{border:1px solid #ffffff4b;border-radius:9px;padding:8px 12px;background:#ffffff14;font-size:12px;font-weight:750}.grid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px;margin:26px auto 38px}.card{background:white;border:1px solid #dae4f0;border-radius:18px;box-shadow:0 8px 22px #071f4910}.aside{padding:22px}.aside h2{font-size:18px;margin:4px 0 6px}.aside p{font-size:13px;line-height:1.65;color:#60738a;margin:0 0 14px}.topic{display:flex;width:100%;text-align:left;border:1px solid #e4eaf2;background:#fff;margin:9px 0;padding:13px;border-radius:12px;font-weight:700;color:#23354b}.topic.active{background:#e8f1ff;border-color:#8cb7ee;color:#004cc1}.aside .info{border-top:1px solid #e7edf4;padding-top:17px;margin-top:20px;font-size:13px;color:#6b7c92;line-height:1.6}.chat{display:flex;flex-direction:column;min-height:560px;overflow:hidden}.chatbar{display:flex;align-items:center;justify-content:space-between;padding:19px 22px;border-bottom:1px solid #e6edf5;gap:15px}.chatbar strong{font-size:17px}.chatbar small{display:block;margin-top:5px;color:#6b7c92}.chatarea{flex:1;padding:20px;display:flex;flex-direction:column;gap:13px;min-height:300px;max-height:570px;overflow-y:auto}.bubble{padding:14px 17px;border-radius:14px;max-width:88%;font-size:14px;line-height:1.7;white-space:pre-wrap}.bot{align-self:flex-start;background:#f0f5fb;border:1px solid #e0e8f2}.user{align-self:flex-end;background:#0647bc;color:#fff}.source{color:#537197;font-size:12px;margin-top:10px;display:block;font-weight:700}.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.quick button{border:1px solid #cadcf1;background:white;color:#154892;border-radius:20px;padding:8px 12px;font-size:12px}.inputbar{border-top:1px solid #e6edf5;padding:15px 17px}.inputrow{display:flex;gap:9px}.inputrow input{flex:1;min-width:0;padding:13px 14px;border-radius:11px;border:1px solid #cad7e8}.primary,.mic,.smallbtn{border:0;border-radius:11px;padding:12px 17px;font-weight:800;background:#004bc0;color:white}.mic{background:#e8f1ff;color:#1253a3}.mic:disabled{opacity:.46;cursor:not-allowed}.smallbtn{background:#e8f1ff;color:#124e9d;font-size:12px;padding:8px 10px}.controls{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:#65758a;margin-bottom:12px}.controls label{display:flex;align-items:center;gap:6px}.controls input{accent-color:#004bc0}.status{font-size:12px;color:#6b7c92;margin:9px 1px 0;min-height:18px}.notice{max-width:1180px;margin:0 auto 36px;padding:0 22px}.notice>div{background:#fff8e6;border:1px solid #f1dba2;border-radius:12px;padding:15px 18px;color:#6d5216;line-height:1.6;font-size:13px}footer{border-top:1px solid #e0e7f1;text-align:center;font-size:12px;color:#6b7c92;padding:26px 20px}@media(max-width:800px){.grid{grid-template-columns:1fr;margin-top:14px}.aside{padding:15px}.topics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.topic{margin:0}.aside .info{display:none}.chat{min-height:550px}.hero .wrap{padding-top:31px;padding-bottom:32px}}@media(max-width:450px){.wrap{padding:0 14px}.brand{font-size:20px}.brand small{font-size:10px}.preview{font-size:10px;padding:5px 7px}.chatbar{padding:14px}.chatarea{padding:13px}.bubble{max-width:95%}.inputbar{padding:12px}.inputrow{gap:6px}.inputrow input{padding:11px}.primary,.mic{padding:11px}.topics{grid-template-columns:1fr 1fr}.topic{font-size:12px;padding:11px 9px}}
+
+
+/* Portada 2026 · Especialidad de Mecánica de Mantenimiento */
+html{scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#f6f9ff 0%,#f1f6fd 70%,#f8fbff 100%)}
+header{position:relative;z-index:2}
+.brand{letter-spacing:-.035em}.brand small{letter-spacing:.085em;line-height:1.45}
+.header-right{display:flex;align-items:center;gap:13px}
+.header-link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#073eac;color:white;border-radius:10px;padding:10px 15px;font-size:12px;font-weight:800;white-space:nowrap;transition:transform .2s,background .2s}
+.header-link:hover{background:#062e87;transform:translateY(-1px)}
+.hero{background:linear-gradient(116deg,#051d50 1%,#073781 48%,#075ec3 100%);isolation:isolate}
+.hero:after{right:-90px;top:-190px;width:740px;height:740px;border:1px solid #ffffff14;box-shadow:0 0 0 92px #ffffff06,0 0 0 184px #ffffff03}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 82% 70%,#13aae226,transparent 51%);pointer-events:none}
+.hero .wrap{padding-top:52px;padding-bottom:53px}
+.hero-layout{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(290px,.78fr);gap:48px;align-items:center}
+.hero .eyebrow{display:flex;align-items:center;gap:9px;letter-spacing:.13em;font-size:11px;line-height:1.7;color:#b6e8ff}
+.hero-spark{flex-shrink:0;width:9px;height:9px;border-radius:50%;background:#6ee7c2;box-shadow:0 0 0 5px #6ee7c221}
+.hero h1{font-size:clamp(34px,4.5vw,58px);max-width:720px;line-height:1.08;letter-spacing:-.044em;margin:18px 0 18px}
+.hero h1 em{font-style:normal;color:#8bd9ff}
+.hero p{max-width:650px;font-size:15px;color:#e6eeff;line-height:1.78}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-actions a{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:45px;padding:10px 17px;border-radius:11px;font-size:13px;font-weight:850;transition:transform .2s,background .2s}
+.hero-actions a:hover{transform:translateY(-2px)}
+.hero-actions .main-action{background:#fff;color:#063eae;box-shadow:0 9px 26px #001c4e33}
+.hero-actions .second-action{background:#ffffff12;color:white;border:1px solid #ffffff60}
+.hero .badges{margin-top:27px;gap:16px}
+.hero .badges span{padding:0;background:none;border:none;color:#c0d4f4;font-size:11px;font-weight:650;white-space:nowrap}
+.hero .badges span:before{content:"✓";color:#70e9c3;padding-right:6px}
+.hero-visual{position:relative;border:1px solid #ffffff42;background:linear-gradient(154deg,#ffffff1c,#e4f4ff09);box-shadow:0 22px 60px #00133a52;border-radius:22px;padding:20px;backdrop-filter:blur(5px)}
+.hero-visual-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff2b;padding:1px 1px 14px}
+.hero-visual-head strong{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.hero-visual-head span{font-size:10px;color:#cbf7e1;font-weight:800}
+.hero-visual .count{font-size:64px;letter-spacing:-.07em;line-height:1;font-weight:850;margin-top:20px}
+.hero-visual .count-label{font-weight:700;color:#d4e6ff;font-size:13px;margin-top:5px}
+.hero-visual .count-note{font-size:11px;color:#a8c7ee;line-height:1.5;margin:10px 0 0}
+.hero-visual-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:22px}
+.hero-visual-row{padding:12px;border:1px solid #ffffff38;background:#ffffff11;border-radius:12px}
+.hero-visual-row b{display:block;font-size:12px;color:#fff}
+.hero-visual-row small{display:block;font-size:10px;color:#d3e8ff;margin-top:4px}
+.hero-visual-bottom{display:flex;justify-content:space-between;gap:12px;margin-top:17px;border-top:1px solid #ffffff27;padding-top:14px;color:#b8d6f7;font-size:10px;font-weight:700;letter-spacing:.04em}
+.capabilities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px;margin-bottom:9px}
+.capability{display:flex;align-items:flex-start;gap:12px;padding:17px;background:#fff;border:1px solid #dde8f5;border-radius:14px;box-shadow:0 5px 15px #142e5b09}
+.capability-symbol{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:10px;color:#084cb9;background:#eaf2ff;font-size:18px;font-weight:900}
+.capability strong{font-size:13px;display:block;color:#112e55}
+.capability p{font-size:11.5px;color:#627690;line-height:1.55;margin:5px 0 0}
+.grid{margin-top:20px}
+.aside .info{color:#536780}
+.aside .info b{color:#244063}
+.topic{transition:border-color .18s,background .18s}
+.topic:hover{border-color:#9ebce8}
+.program-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.program-tags span{font-size:11px;line-height:1.4;padding:7px 9px;background:#f2f6fc;color:#3c5b80;border:1px solid #e2eaf4;border-radius:20px}
+.course-note{font-size:11px!important;line-height:1.5!important;color:#60738a;margin-top:12px!important}
+.focus-title{font-size:12px;font-weight:800;color:#29578f;margin:18px 0 8px}
+.notice>div{background:#f8fafc;border-color:#dce7f4;color:#4f6280}
+#consulta{scroll-margin-top:24px}
+#biblioteca{scroll-margin-top:24px}
+@media(max-width:920px){.hero-layout{gap:22px;grid-template-columns:minmax(0,1fr) minmax(260px,.7fr)}.hero-visual{padding:15px}.hero-visual .count{font-size:52px}.capabilities{gap:9px}.capability{padding:12px}}
+@media(max-width:760px){.hero-layout{grid-template-columns:1fr}.hero-visual{max-width:540px}.hero .wrap{padding-top:35px;padding-bottom:35px}.capabilities{grid-template-columns:1fr;gap:8px}.capability{padding:12px 15px}}
+@media(max-width:450px){.hero h1{font-size:34px}.hero .badges{gap:8px 12px}.header-link{padding:8px 9px;font-size:11px}.brand{font-size:20px}.hero-visual .count{font-size:45px}.hero-visual-list{gap:6px}.hero-visual-row{padding:9px}.hero-actions a{width:100%}.header-right .preview{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-actions a,.header-link{transition:none}}
+
 </style>
 </head>
 <body>
-<header><div class="wrap top"><div class="brand"><span>SENATI</span><span class="separator"></span><small>AULA TÉCNICA<br>CHINCHA</small></div><span class="preview">BIBLIOTECA TÉCNICA</span></div></header>
-<section class="hero"><div class="wrap"><div class="eyebrow">MÁQUINAS HERRAMIENTAS · ASISTENTE DE ESTUDIO</div><h1>Aprende preguntando.<br>Domina la técnica.</h1><p>Realiza consultas sobre torno, fresadora y rectificadora. Recibe respuestas relacionadas con los manuales y escúchalas en voz alta cuando tu dispositivo lo permita.</p><div class="badges"><span>✓ PC y laptop</span><span>✓ Android y iPhone</span><span>✓ Sin instalar aplicaciones</span></div></div></section>
-<main class="wrap grid">
-<aside class="card aside"><h2>Temas de consulta</h2><p>Selecciona la máquina sobre la cual necesitas estudiar.</p><div class="topics"><button class="topic active" data-t="all">▦ Todos los temas</button><button class="topic" data-t="torno">◉ Torno I</button><button class="topic" data-t="fresadora">▤ Fresadora I</button><button class="topic" data-t="rectificadora">✳ Rectificadora plana</button></div><div class="info"><b>Acerca de esta versión</b><p>Demostración con fichas técnicas ampliadas y referencias de páginas. Todavía NO contiene los tres manuales completos ni un modelo generativo de inteligencia artificial.</p><p>Antes de usar cualquier máquina, consulta al instructor y sigue la seguridad del taller.</p></div></aside>
-<section class="card chat"><div class="chatbar"><div><strong>✧ Asistente técnico virtual</strong><small>Biblioteca de tres manuales · citas por página · no reemplaza al instructor</small></div><button class="smallbtn" id="clear" type="button">Nuevo chat</button></div>
-<div class="chatarea" id="messages" aria-live="polite"><div class="bubble bot">¡Hola! Soy el asistente técnico de prueba. Puedes preguntarme por el cilindrado en torno, el montaje de la prensa en fresadora o para qué se rectifica una muela.<div class="quick"><button data-q="¿Qué es el cilindrado?">¿Qué es el cilindrado?</button><button data-q="¿Cómo se monta la prensa en fresadora?">Montaje de prensa</button><button data-q="¿Para qué se rectifica la muela?">Rectificar muela</button></div></div></div>
-<div class="inputbar"><div class="controls"><label><input type="checkbox" id="autovoice" checked> Leer respuestas en voz alta</label><div><button class="smallbtn" id="repeat" type="button">↻ Repetir</button> <button class="smallbtn" id="stop" type="button">■ Detener</button></div></div><form id="form" class="inputrow"><input id="question" maxlength="400" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Pregunta"><button class="mic" id="mic" type="button" title="Hablar: dictado local o con servicio del navegador">🎙</button><button class="primary" type="submit">Enviar</button></form><div class="status" id="status">Puedes preguntar por texto. Presiona 🎙 para hablar. Si tu navegador no tiene voz local, podrás utilizar dictado con internet.</div></div></section>
+<header><div class="wrap top"><div class="brand" aria-label="SENATI Chincha"><span>SENATI</span><span class="separator"></span><small>AULA TÉCNICA<br>CHINCHA</small></div><div class="header-right"><span class="preview">MECÁNICA DE MANTENIMIENTO</span><a class="header-link" href="#consulta">Abrir asistente <span aria-hidden="true">↗</span></a></div></div></header>
+<section class="hero" aria-labelledby="hero-title"><div class="wrap hero-layout">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="hero-spark" aria-hidden="true"></span> ESPECIALIDAD DE MECÁNICA DE MANTENIMIENTO</div>
+    <h1 id="hero-title">El conocimiento técnico,<br><em>al alcance de cada pregunta.</em></h1>
+    <p>Tu espacio de aprendizaje especializado en Mecánica de Mantenimiento. Explora manuales técnicos, realiza preguntas y recibe explicaciones claras por escrito y por voz, con prioridad a las fuentes de nuestra biblioteca.</p>
+    <div class="hero-actions"><a class="main-action" href="#consulta">Iniciar consulta <span aria-hidden="true">→</span></a><a class="second-action" href="#biblioteca">Explorar biblioteca <span aria-hidden="true">↗</span></a></div>
+    <div class="badges"><span>PC y laptop</span><span>Android y iPhone</span><span>Sin instalar nada</span></div>
+  </div>
+  <div class="hero-visual" role="group" aria-label="Resumen de la biblioteca técnica">
+    <div class="hero-visual-head"><strong>Biblioteca inteligente</strong><span>● Consulta académica</span></div>
+    <div class="count">23</div><div class="count-label">manuales técnicos integrados</div>
+    <p class="count-note">Mantenimiento, soldadura, electricidad, electrónica, neumática, hidráulica, PLC y máquinas herramientas.</p>
+    <div class="hero-visual-list">
+      <div class="hero-visual-row"><b>01 · Manuales primero</b><small>Consulta documental prioritaria</small></div>
+      <div class="hero-visual-row"><b>02 · Fuentes externas</b><small>Respaldo cuando sea necesario</small></div>
+      <div class="hero-visual-row"><b>03 · Respuesta escrita</b><small>Explicaciones para estudiar</small></div>
+      <div class="hero-visual-row"><b>04 · Lectura por voz</b><small>Escucha mientras aprendes</small></div>
+    </div>
+    <div class="hero-visual-bottom"><span>AULA TÉCNICA · CHINCHA</span><span>FORMACIÓN TÉCNICA</span></div>
+  </div>
+</div></section>
+<section class="wrap capabilities" aria-label="Ventajas del asistente">
+  <article class="capability"><div class="capability-symbol" aria-hidden="true">▤</div><div><strong>Consulta documental</strong><p>Respuestas basadas primero en los manuales, con identificación de las páginas de referencia.</p></div></article>
+  <article class="capability"><div class="capability-symbol" aria-hidden="true">⌕</div><div><strong>Información complementaria</strong><p>Cuando el material no es suficiente, el asistente puede consultar referencias externas identificadas.</p></div></article>
+  <article class="capability"><div class="capability-symbol" aria-hidden="true">♫</div><div><strong>Aprende escuchando</strong><p>Lee y escucha las respuestas desde tu celular o computadora, sin instalar programas.</p></div></article>
+</section>
+<main class="wrap grid" id="consulta">
+<aside class="card aside" id="biblioteca"><h2>Biblioteca de la especialidad</h2><p>Consulta todas las áreas o elige un módulo de máquinas herramientas. Los otros manuales aparecen en la biblioteca ampliada.</p><div class="topics"><button class="topic active" data-t="all">▦ Todos los temas</button><button class="topic" data-t="torno">◉ Torno I</button><button class="topic" data-t="fresadora">▤ Fresadora I</button><button class="topic" data-t="rectificadora">✳ Rectificadora plana</button></div><div class="focus-title">Áreas de formación</div><div class="program-tags"><span>Mantenimiento mecánico</span><span>Mecánica de banco</span><span>Soldadura</span><span>Electricidad y electrónica</span><span>Neumática e hidráulica</span><span>Electroneumática</span><span>PLC y control</span><span>Gestión del mantenimiento</span></div><div class="info"><b>Consulta con criterio técnico</b><p>Se priorizan los manuales incorporados; cuando falte información, pueden emplearse fuentes externas identificadas. Verifica esquemas, tablas y medidas con el material original.</p><p>La aplicación es un apoyo educativo y no reemplaza al instructor ni los procedimientos de seguridad.</p></div></aside>
+<section class="card chat"><div class="chatbar"><div><strong>✧ Asistente virtual de Mecánica de Mantenimiento</strong><small>Biblioteca técnica ampliada · respuestas escritas y por voz</small></div><button class="smallbtn" id="clear" type="button">Nuevo chat</button></div>
+<div class="chatarea" id="messages" aria-live="polite"><div class="bubble bot">¡Hola! Soy tu asistente técnico para la especialidad de Mecánica de Mantenimiento. Puedes preguntarme sobre mantenimiento preventivo, soldadura, electricidad, neumática, hidráulica, PLC y máquinas herramientas.<div class="quick"><button data-q="¿Qué es la neumática?">¿Qué es la neumática?</button><button data-q="¿En qué consiste el mantenimiento preventivo?">Mantenimiento preventivo</button><button data-q="¿Para qué sirve un PLC?">¿Qué es un PLC?</button></div></div></div>
+<div class="inputbar"><div class="controls"><label><input type="checkbox" id="autovoice" checked> Leer respuestas en voz alta</label><div><button class="smallbtn" id="repeat" type="button">↻ Repetir</button> <button class="smallbtn" id="stop" type="button">■ Detener</button></div></div><form id="form" class="inputrow"><input id="question" maxlength="400" placeholder="Pregunta sobre mantenimiento, neumática, PLC, soldadura..." autocomplete="off" aria-label="Pregunta"><button class="mic" id="mic" type="button" title="Hablar: dictado local o con servicio del navegador">🎙</button><button class="primary" type="submit">Enviar</button></form><div class="status" id="status">Puedes preguntar por texto. Presiona 🎙 para hablar. Si tu navegador no tiene voz local, podrás utilizar dictado con internet.</div></div></section>
 </main>
-<div class="notice"><div><b>Nota de publicación:</b> Versión de consulta textual de Torno I, Fresadora I y Rectificadora Plana con referencias al manual y número de página PDF. Las figuras y planos originales no se muestran. Las definiciones y operaciones frecuentes tienen respuestas revisadas; las consultas no reconocidas se señalan sin inventar respuestas. El asistente no sustituye al instructor. El micrófono sin conexión depende del navegador.</div></div>
-<footer>Proyecto educativo demostrativo de apoyo al estudio · No es una plataforma oficial institucional ni sustituye las instrucciones de seguridad del taller.</footer>
+<div class="notice"><div><b>Información importante:</b> Aula Técnica SENATI Chincha es una herramienta de apoyo académico para Mecánica de Mantenimiento. La IA da prioridad a los manuales y puede recurrir a fuentes externas identificadas. Los textos digitalizados mediante OCR pueden contener errores en cifras, símbolos y diagramas; verifica los documentos originales y las indicaciones del instructor antes de operar maquinaria. La IA en la nube requiere internet y las funciones de voz dependen del navegador.</div></div>
+<footer>Aula Técnica SENATI Chincha · Proyecto educativo de apoyo a Mecánica de Mantenimiento · Plataforma no oficial. Respeta siempre los protocolos de seguridad del taller.</footer>
 <script>
 'use strict';
 const DOCS=[
