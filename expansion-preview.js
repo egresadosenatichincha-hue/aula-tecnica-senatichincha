@@ -15,12 +15,18 @@ const catalog=[
 {id:"hidroneumatica-parte-ii",name:"Mantenimiento de equipos hidráulicos y neumáticos II",kind:"hidroneumatica2"},
 {id:"mandos-hidraulicos",name:"Mandos de Máquinas Hidráulicas",kind:"mandoshidraulicos"},
 {id:"mandos-electroneumaticos",name:"Mandos de Sistemas Electroneumáticos",kind:"electroneumatica"},
-{id:"control-plc",name:"Sistema de Control con PLC",kind:"plc"}
+{id:"control-plc",name:"Sistema de Control con PLC",kind:"plc"},
+{id:"soldadura-mantenimiento-i",name:"Soldadura de Mantenimiento I",kind:"soldadura1"},
+{id:"afilado-manual",name:"Afilado Manual de Herramientas de Corte",kind:"afilado"},
+{id:"soldadura-mantenimiento-ii",name:"Soldadura de Mantenimiento II",kind:"soldadura2"},
+{id:"soldadura-mantenimiento-iii",name:"Soldadura de Mantenimiento III",kind:"soldadura3"},
+{id:"mandos-contactores",name:"Mandos por Contactor de Motores Asíncronos",kind:"contactores"},
+{id:"mandos-neumaticos",name:"Mandos de Máquinas Neumáticas",kind:"neumatica"}
 ];
 const status=document.createElement("div");
 status.id="expansionStatus";
 status.style.cssText="padding:12px 16px;background:#eaf2ff;color:#184983;border:1px solid #adcafb;border-radius:10px;margin:10px 0;font-size:13px";
-status.textContent="Ampliación documental: cargando catorce manuales adicionales…";
+status.textContent="Ampliación documental: cargando veinte manuales adicionales…";
 document.querySelector(".aside")?.prepend(status);
 Promise.allSettled(catalog.map(async x=>{
 const r=await fetch("./data/ampliados/"+x.id+".json",{cache:"no-cache"});
