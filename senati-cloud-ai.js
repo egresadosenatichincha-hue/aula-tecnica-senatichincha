@@ -94,8 +94,9 @@
  window.SENATI_REQUEST_AI=async function(question){
    const endpoint=window.SENATI_AI_ENDPOINT;
    if(!endpoint)return null;
+   if(window.SENATI_LIBRARY_READY){try{await Promise.race([window.SENATI_LIBRARY_READY,new Promise(resolve=>setTimeout(resolve,12000))])}catch(e){}}
    const evidence=isFileTool(question)?await manualFileEvidence(question):nearest(question);
-   const technicalQuestion=isFileTool(question)?question+' (consulta de mecánica de banco: herramienta de limado y ajuste de metales, NO una ubicación geográfica)':question;
+   const technicalQuestion=question;
    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:technicalQuestion,selected:active,evidence}),cache:'no-store'});
    const data=await res.json().catch(()=>({error:'Respuesta del servidor no válida'}));
    if(!res.ok)throw Error(data.error||'Servidor no disponible');
