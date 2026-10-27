@@ -1,0 +1,145 @@
+{
+  "version": 2,
+  "stage": "preview",
+  "approvedForPublicationByUser": true,
+  "documents": [
+    {
+      "id": "electronica-industrial",
+      "name": "Electrónica Industrial",
+      "kind": "electronica",
+      "pages": 85,
+      "file": "data/ampliados/electronica-industrial.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "mantenimiento-mecanico-i",
+      "name": "Mantenimiento Mecánico I",
+      "kind": "mantenimiento",
+      "pages": 382,
+      "file": "data/ampliados/mantenimiento-mecanico-i.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "electricidad-mantenimiento",
+      "name": "Electricidad de Mantenimiento",
+      "kind": "electricidad",
+      "pages": 336,
+      "file": "data/ampliados/electricidad-mantenimiento.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "mecanica-banco-ajuste",
+      "name": "Mecánica de Banco y Ajuste",
+      "kind": "banco",
+      "pages": 353,
+      "file": "data/ampliados/mecanica-banco-ajuste.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "gestion-mantenimiento",
+      "name": "Gestión y Administración del Mantenimiento",
+      "kind": "gestion",
+      "pages": 104,
+      "file": "data/ampliados/gestion-mantenimiento.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "mantenimiento-predictivo-tpm",
+      "name": "Mantenimiento Predictivo y TPM",
+      "kind": "predictivo",
+      "pages": 123,
+      "file": "data/ampliados/mantenimiento-predictivo-tpm.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "mantenimiento-preventivo",
+      "name": "Mantenimiento Preventivo",
+      "kind": "preventivo",
+      "pages": 131,
+      "file": "data/ampliados/mantenimiento-preventivo.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "hidraulica-parte-i",
+      "name": "Mantenimiento y reparación de equipos hidráulicos I",
+      "kind": "hidraulica1",
+      "pages": 150,
+      "file": "data/ampliados/hidraulica-parte-i.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "hidraulica-parte-ii",
+      "name": "Mantenimiento y reparación de equipos hidráulicos II",
+      "kind": "hidraulica2",
+      "pages": 127,
+      "file": "data/ampliados/hidraulica-parte-ii.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "hidroneumatica-parte-i",
+      "name": "Mantenimiento de equipos hidráulicos y neumáticos I",
+      "kind": "hidroneumatica1",
+      "pages": 139,
+      "file": "data/ampliados/hidroneumatica-parte-i.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "hidroneumatica-parte-ii",
+      "name": "Mantenimiento de equipos hidráulicos y neumáticos II",
+      "kind": "hidroneumatica2",
+      "pages": 130,
+      "file": "data/ampliados/hidroneumatica-parte-ii.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "mandos-hidraulicos",
+      "name": "Mandos de Máquinas Hidráulicas",
+      "kind": "mandoshidraulicos",
+      "pages": 156,
+      "file": "data/ampliados/mandos-hidraulicos.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "mandos-electroneumaticos",
+      "name": "Mandos de Sistemas Electroneumáticos",
+      "kind": "electroneumatica",
+      "pages": 137,
+      "file": "data/ampliados/mandos-electroneumaticos.json",
+      "status": "texto_indexado"
+    },
+    {
+      "id": "control-plc",
+      "name": "Sistema de Control con PLC",
+      "kind": "plc",
+      "pages": 132,
+      "file": "data/ampliados/control-plc.json",
+      "status": "texto_indexado"
+    }
+  ],
+  "pending_ocr": [
+    {
+      "title": "Soldadura de Mantenimiento I",
+      "pages": 144
+    },
+    {
+      "title": "Afilado Manual de Herramientas de Corte",
+      "pages": 155
+    },
+    {
+      "title": "Soldadura de Mantenimiento II",
+      "pages": 181
+    },
+    {
+      "title": "Soldadura de Mantenimiento III",
+      "pages": 241
+    },
+    {
+      "title": "Mandos por Contactor de Motores Asíncronos",
+      "pages": 282
+    },
+    {
+      "title": "Mandos de Máquinas Neumáticas",
+      "pages": 142
+    }
+  ]
+}
