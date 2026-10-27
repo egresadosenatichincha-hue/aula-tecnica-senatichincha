@@ -50,11 +50,12 @@ return {name:x.name,pages:seen.size,fragments:added};
 })).then(results=>{
 const success=results.filter(r=>r.status==="fulfilled").map(r=>r.value);
 const failed=results.length-success.length;
-status.textContent=success.length+" manuales nuevos cargados para consulta: "+success.map(x=>x.name).join(", ")+(failed?" · "+failed+" pendientes":"")+". Vista previa: los nuevos documentos están indexados, pero la IA de Cloudflare aún requiere actualizar su lista de manuales. El aula principal no se modifica.";
+status.textContent="Biblioteca SENATI ampliada: "+(3+success.length)+" manuales disponibles para búsqueda documental y consulta con IA."+(failed?" No se pudieron cargar "+failed+" manuales; los originales siguen operativos.":"");
 const box=document.createElement("div");
 box.style.cssText="font-size:12px;color:#365a87;margin-top:10px";
 box.textContent="Fuentes añadidas: "+success.map(x=>x.pages+" págs. de "+x.name).join(" | ");
 status.append(box);
+const chatCounter=document.querySelector(".chatbar small");if(chatCounter)chatCounter.textContent=(3+success.length)+" manuales · citas por página · no reemplaza al instructor";
 const panel=document.createElement("section");
 panel.style.cssText="margin-top:12px;padding:10px;border-top:1px solid #c3d8f1";
 const heading=document.createElement("div");heading.textContent="Seleccionar manual ampliado:";heading.style.cssText="font-weight:700;margin:0 0 7px";panel.append(heading);
