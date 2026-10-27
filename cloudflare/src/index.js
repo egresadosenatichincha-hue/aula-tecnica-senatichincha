@@ -127,6 +127,19 @@ async function getPublicJson(url){
  }catch{return null}
  finally{clearTimeout(timer)}
 }
+const INDUSTRIAL_TERMS=/\b(mecanica|mecanico|mantenimiento|maquina|herramienta|torno|fresadora|rectificadora|limas?|limado|soldadura|electrodo|hidraulica|neumatica|neumatico|contactores?|electrica|electricidad|plc|rodamiento|polea|faja|corte|afilado|calibrador|micrometro|motor|engranaje|valvula|lubricacion|cilindro|bomba|metrologia|banco|ajuste)\b/;
+const GEOGRAPHIC_RESULTS=/\b(ciudad|municipio|comuna|francia|poblacion|habitantes|region|capital|departamento|provincia|turismo|geografia|rio|oceano|distrito|territorio|alcalde)\b/;
+function technicalSource(ref,subject){
+ const title=ascii(ref?.title||"");
+ const body=ascii(ref?.text||"");
+ const topic=ascii(subject);
+ if(GEOGRAPHIC_RESULTS.test(title))return false;
+ if(GEOGRAPHIC_RESULTS.test(body.slice(0,440))&&!INDUSTRIAL_TERMS.test(body.slice(0,440)))return false;
+ if(!INDUSTRIAL_TERMS.test(title+" "+body.slice(0,600)))return false;
+ const ts=topic.split(" ").filter(w=>w.length>3);
+ if(ts.length&&!ts.some(w=>title.includes(w)||body.includes(w)))return false;
+ return true;
+}
 async function wikipediaReference(question){
  const subject=topicOf(question);
  if(subject.length<3)return null;
@@ -162,7 +175,7 @@ async function webFallback(question,env,headers){
  // No se buscan URLs arbitrarias proporcionadas por el alumno.
  const authoritative=festoReference(question);
  const wiki=await wikipediaReference(question);
- const references=[authoritative,wiki].filter(Boolean);
+ const references=[authoritative,wiki].filter(r=>r && (r.origin==="fabricante" || technicalSource(r,topicOf(question))));
  if(!references.length)return null;
  const evidence=references.map((r,i)=>"[WEB "+(i+1)+" · "+r.title+" · "+r.url+"]\n"+r.text).join("\n\n");
  let answer="";
@@ -196,7 +209,7 @@ async function handler(request,env){
  const headers=cors(origin);
  if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
  if(url.pathname==="/" && request.method==="GET"){
-  return json({service:"Aula Técnica SENATI - IA en Cloudflare",status:"configured",model:MODEL,manual_priority:true,version:"2.2",web_fallback:true,web_provider:"Wikipedia ES + referencias técnicas Festo",ai_bound:!!env.AI,manual_count:Object.keys(DOC_NAMES).length},200,headers);
+  return json({service:"Aula Técnica SENATI - IA en Cloudflare",status:"configured",model:MODEL,manual_priority:true,version:"2.3",web_fallback:true,web_provider:"Wikipedia ES + referencias técnicas Festo",ai_bound:!!env.AI,manual_count:Object.keys(DOC_NAMES).length},200,headers);
  }
  if(url.pathname!=="/" && url.pathname!=="/ask")return json({error:"Ruta no encontrada"},404,headers);
  if(request.method!=="POST")return json({error:"Utiliza POST /ask"},405,headers);
