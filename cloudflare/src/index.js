@@ -39,7 +39,7 @@ function untrustedContext(evidence){
  }).join('\n\n');
 }
 const SYSTEM = [
- "Eres el tutor técnico de Máquinas Herramientas de SENATI CFP Chincha.",
+ "Eres el tutor de la especialidad de Mecánica de Mantenimiento, SENATI Chincha. Todas las preguntas se interpretan primero en contexto de mecánica de banco, ajuste, máquinas herramientas, electricidad, neumática, hidráulica, soldadura, PLC y mantenimiento industrial.",
  "Responde en español peruano natural, de forma clara, técnica y didáctica para estudiantes.",
  "PRIORIDAD ABSOLUTA: los fragmentos identificados como MANUAL. Utiliza únicamente los datos que estén respaldados por el contexto proporcionado para citar un manual.",
  "No inventes citas, páginas, referencias, fórmulas ni valores. Ninguna página es válida salvo las indicadas entre corchetes.",
@@ -97,7 +97,7 @@ function isManualNonAnswer(text){
  return /(?:no (?:se encuentra|encontr[eé]|dispongo|tenemos|contiene|aparece|puedo responder|cuento con)|no est[aá] (?:definid[oa]|descrit[oa])|falta (?:informaci[oó]n|una definici[oó]n)|no hay (?:informaci[oó]n|una definici[oó]n|evidencia)|no disponemos de|la documentaci[oó]n (?:no|carece)|no se identifica)/i.test(text);
 }
 const WEB_AGENT=[
- "Eres un tutor técnico para estudiantes SENATI.",
+ "Eres el tutor técnico de Mecánica de Mantenimiento de SENATI. Interpreta palabras ambiguas como herramientas y procesos metalmecánicos: lima y limas son herramientas de limado, NO ciudades. Jamás respondas con geografía salvo petición explícita del estudiante.",
  "No recibiste evidencia suficiente de manuales para contestar la pregunta.",
  "Responde únicamente con la evidencia web suministrada, no con memoria ni conjeturas.",
  "Si los fragmentos son enciclopédicos, no los presentes como norma técnica ni manual del fabricante.",
@@ -158,6 +158,7 @@ async function wikipediaReference(question){
   text:content.slice(0,1150),origin:"enciclopedia"};
 }
 async function webFallback(question,env,headers){
+ if(/\blimas?\b/.test(ascii(question))&&!/\b(ciudad|capital|provincia|francia|peru|geografia|turismo)\b/.test(ascii(question)))return null;
  // No se buscan URLs arbitrarias proporcionadas por el alumno.
  const authoritative=festoReference(question);
  const wiki=await wikipediaReference(question);
@@ -195,7 +196,7 @@ async function handler(request,env){
  const headers=cors(origin);
  if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
  if(url.pathname==="/" && request.method==="GET"){
-  return json({service:"Aula Técnica SENATI - IA en Cloudflare",status:"configured",model:MODEL,manual_priority:true,version:"2.1",web_fallback:true,web_provider:"Wikipedia ES + referencias técnicas Festo",ai_bound:!!env.AI,manual_count:Object.keys(DOC_NAMES).length},200,headers);
+  return json({service:"Aula Técnica SENATI - IA en Cloudflare",status:"configured",model:MODEL,manual_priority:true,version:"2.2",web_fallback:true,web_provider:"Wikipedia ES + referencias técnicas Festo",ai_bound:!!env.AI,manual_count:Object.keys(DOC_NAMES).length},200,headers);
  }
  if(url.pathname!=="/" && url.pathname!=="/ask")return json({error:"Ruta no encontrada"},404,headers);
  if(request.method!=="POST")return json({error:"Utiliza POST /ask"},405,headers);
@@ -241,6 +242,9 @@ async function handler(request,env){
   if(isManualNonAnswer(result)){
    const external=await webFallback(question,env,headers);
    if(external)return external;
+  }
+  if(/\blimas?\b/.test(ascii(question))&&!/\b(ciudad|capital|provincia|francia|peru|geografia)\b/.test(ascii(question)) && /\b(ciudad|capital|comuna francesa|departamento de rodano|auvernia|oceano pacifico)\b/.test(ascii(result))){
+   return json({answer:"La información generada no corresponde a Mecánica de Mantenimiento. Consulta el manual de Mecánica de Banco y Ajuste, apartado LIMAS, página PDF 27.",manual_source:null,sources:[],web_sources:[],verified:false,mode:"off_topic_rejected"},200,headers);
   }
   const sources=sourceList(evidence);
   return json({
